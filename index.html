@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>xt9 — Développeur Backend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f6dce8;
+    --surface: #171118;
+    --surface-2: #251a28;
+    --border: #493447;
+    --text: #ece4d3;
+    --text-muted: #c4b1bd;
+    --accent: #f09ac0;
+    --accent-dim: #b86b91;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.65;
+    font-size:16px;
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:-20%;
+    z-index:-1;
+    pointer-events:none;
+    background:
+      radial-gradient(circle at 18% 20%, rgba(255,255,255,0.58) 0 2px, transparent 3px),
+      radial-gradient(circle at 75% 68%, rgba(255,255,255,0.36) 0 1px, transparent 3px),
+      radial-gradient(circle at 42% 82%, rgba(205,107,153,0.22) 0 18%, transparent 42%),
+      linear-gradient(120deg, #f8e3ed, #efc7db 48%, #f8dce8);
+    background-size:170px 170px, 230px 230px, 100% 100%, 240% 240%;
+    animation:pastelDrift 18s ease-in-out infinite alternate;
+  }
+
+  @keyframes pastelDrift{
+    from{transform:translate3d(-2%, -1%, 0); background-position:0 0, 0 0, 0 0, 0% 50%;}
+    to{transform:translate3d(2%, 1%, 0); background-position:35px -25px, -30px 28px, 0 0, 100% 50%;}
+  }
+
+  h1, h2, .cmd, .brand, .tag, nav a{
+    font-family:'JetBrains Mono', monospace;
+  }
+
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:10;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:20px 40px;
+    background:rgba(23,17,24,0.94);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
+  }
+  .brand{font-weight:700; font-size:1.1rem; color:var(--text);}
+  .brand span{color:var(--accent);}
+  nav .links a{margin-left:28px; font-size:0.9rem; color:var(--text-muted);}
+  nav .links a:hover{color:var(--accent); text-decoration:none;}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    display:flex; flex-direction:column; align-items:center; gap:18px;
+    padding:80px 24px 60px;
+  }
+  .profile-card{
+    width:100%; max-width:640px;
+    position:relative;
+    transform:perspective(900px) rotateX(0deg) rotateY(0deg);
+    transition:transform 0.18s ease-out;
+    will-change:transform;
+  }
+  .terminal{
+    width:100%; max-width:640px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  }
+  .terminal-bar{
+    display:flex; gap:8px;
+    padding:12px 16px;
+    background:var(--surface-2);
+    border-bottom:1px solid var(--border);
+  }
+  .dot{width:11px; height:11px; border-radius:50%;}
+  .dot.red{background:#5e4436;}
+  .dot.yellow{background:#7a5a24;}
+  .dot.green{background:#4a5a3a;}
+  .terminal-body{padding:28px 28px 34px;}
+  .prompt{color:var(--text-muted); font-size:0.95rem;}
+  .prompt .user{color:var(--accent);}
+  #typed{color:var(--text);}
+  .cursor{display:inline-block; width:8px; height:1.1em; background:var(--accent); vertical-align:text-bottom; animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  h1{
+    font-size:2.2rem;
+    margin:18px 0 6px;
+    color:var(--text);
+  }
+  .role{color:var(--text-muted); font-size:1rem; margin-bottom:18px;}
+  .avatar{
+    width:120px; height:120px; border-radius:8px;
+    border:1px solid var(--border);
+    object-fit:cover;
+    margin-bottom:14px;
+  }
+  .hero-links{display:flex; gap:16px; margin-top:6px;}
+  .hero-links a{
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:0.85rem; color:var(--text-muted);
+    border:1px solid var(--border); padding:6px 12px; border-radius:6px;
+  }
+  .hero-links a img{width:16px; height:16px; object-fit:contain;}
+  .hero-links a:hover{color:var(--accent); border-color:var(--accent-dim); text-decoration:none;}
+
+  .discord-card{
+    width:100%; max-width:640px;
+    display:flex; align-items:center; gap:16px;
+    padding:20px 24px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.28);
+    transform:perspective(900px) rotateX(0deg) rotateY(0deg);
+    transition:transform 0.18s ease-out;
+    will-change:transform;
+  }
+  .discord-icon{
+    width:50px; height:50px; flex:0 0 50px;
+    display:block; object-fit:cover;
+    border-radius:50%;
+    border:2px solid #5865f2;
+  }
+  .discord-info{min-width:0; flex:1;}
+  .discord-name{color:var(--text); font-family:'JetBrains Mono', monospace; font-size:1rem;}
+  .discord-tag{color:var(--text-muted); font-size:0.82rem; margin-left:6px;}
+  .discord-status{color:var(--text-muted); font-size:0.82rem; margin-top:4px;}
+  .status-dot{display:inline-block; width:8px; height:8px; margin-right:6px; border-radius:50%; background:#747f8d;}
+  .badges{display:flex; gap:6px; margin-top:10px;}
+  .badge{
+    width:27px; height:27px; display:grid; place-items:center;
+    border:1px solid var(--border); border-radius:6px;
+    background:var(--surface-2); color:var(--accent);
+    font-family:'JetBrains Mono', monospace; font-size:0.7rem;
+  }
+  .badge img{width:17px; height:17px; object-fit:contain;}
+
+  /* ---------- SECTIONS ---------- */
+  main{max-width:680px; margin:0 auto; padding:0 24px 100px;}
+  section{
+    margin-bottom:18px;
+    padding:34px 28px;
+    background:rgba(23,17,24,0.96);
+    border:1px solid var(--border);
+    border-radius:8px;
+    box-shadow:0 18px 45px rgba(77,35,58,0.18);
+  }
+  section:last-child{margin-bottom:0;}
+  .cmd{color:var(--accent-dim); font-size:0.85rem; margin-bottom:10px;}
+  .cmd::before{content:" "; }
+  h2{font-size:1.4rem; margin-bottom:16px; color:var(--text); font-weight:500;}
+  p{color:var(--text-muted); max-width:60ch;}
+  p.edit-note{color:var(--accent-dim); font-size:0.82rem; margin-top:8px; font-style:italic;}
+
+  /* tags */
+  .tags{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;}
+  .tag{
+    font-size:0.8rem; color:var(--text);
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    padding:6px 12px; border-radius:5px;
+  }
+  .tag::before{content:"--"; color:var(--accent);}
+
+  /* lists */
+  ul.plain{list-style:none;}
+  ul.plain li{
+    color:var(--text-muted);
+    padding:8px 0 8px 22px;
+    position:relative;
+    border-bottom:1px dashed var(--border);
+  }
+  ul.plain li:last-child{border-bottom:none;}
+  ul.plain li::before{content:"›"; position:absolute; left:0; color:var(--accent);}
+
+  /* languages */
+  .lang-row{display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px dashed var(--border);}
+  .lang-row:last-child{border-bottom:none;}
+  .lang-name{color:var(--text); font-size:0.95rem;}
+  .bar{width:140px; height:6px; background:var(--surface-2); border-radius:3px; overflow:hidden; border:1px solid var(--border);}
+  .bar-fill{height:100%; background:var(--accent);}
+
+  /* companies */
+  .companies{display:flex; flex-wrap:wrap; gap:14px; margin-top:6px;}
+  .company{
+    padding:14px 20px; background:var(--surface); border:1px solid var(--border);
+    border-radius:6px; color:var(--text-muted); font-size:0.9rem;
+  }
+
+  /* projects */
+  .projects{display:grid; grid-template-columns:1fr; gap:16px; margin-top:6px;}
+  .project{
+    background:var(--surface); border:1px solid var(--border); border-radius:8px;
+    padding:20px 22px; transition:border-color 0.2s ease;
+  }
+  .project:hover{border-color:var(--accent-dim);}
+  .project h3{font-size:1.05rem; color:var(--text); margin-bottom:6px; font-family:'JetBrains Mono', monospace; font-weight:500;}
+  .project p{margin-bottom:10px; font-size:0.92rem;}
+  .project .stack{font-size:0.78rem; color:var(--accent-dim);}
+  .project a{font-size:0.85rem;}
+
+  /* contact */
+  .contact-list{display:flex; flex-direction:column; gap:10px; margin-top:6px;}
+  .contact-list a{color:var(--text); font-size:0.95rem;}
+  .contact-list a span{color:var(--text-muted);}
+
+  footer{
+    text-align:center; padding:30px 24px; color:var(--text-muted);
+    font-size:0.8rem; border-top:1px solid var(--border);
+    background:rgba(23,17,24,0.94);
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    body::before{animation:none;}
+    .profile-card,.discord-card{transition:none;}
+  }
+
+  @media (max-width:600px){
+    nav{padding:16px 20px;}
+    .terminal-body{padding:22px 18px 28px;}
+    section{padding:28px 20px;}
+    h1{font-size:1.7rem;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand"><span>xt9</span></div>
+  <div class="links">
+    <a href="#projects">Projects</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="profile-card">
+   <div class="terminal">
+    <div class="terminal-bar">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+    </div>
+    <div class="terminal-body">
+     <img class="avatar" src="1009439704188818656.jpeg" alt="Ma photo">
+      <h1 id="typed"></h1>
+      <p class="role">Editor, Artist & Laziness Specialist </p>
+      <div class="hero-links">
+        <a href="https://github.com/xt9w" target="_blank"><img src="https://cdn.simpleicons.org/github/ffffff" alt="" aria-hidden="true">GitHub</a>
+        <a href="https://www.tiktok.com/@xt9vfx" target="_blank"><img src="https://cdn.simpleicons.org/tiktok/ffffff" alt="" aria-hidden="true">Tiktok</a>
+        <a href="https://discord.gg/vqH2sFtHA8" target="_blank"><img src="https://cdn.simpleicons.org/discord/ffffff" alt="" aria-hidden="true">Discord</a>
+        <a href="https://open.spotify.com/user/olx8d07hxx7pwy4ov09aueo85?si=2e0b046be3834752" target="_blank"><img src="https://cdn.simpleicons.org/spotify/ffffff" alt="" aria-hidden="true">Spotify</a>
+        <a href="#projects">Some Projects</a>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="discord-card">
+    <img class="discord-icon" src="https://cdn.discordapp.com/avatars/924574872120721409/1e8af66b459ea22376ec7c982c6ee5e5.webp?size=128" alt="Avatar Discord de xt9w">
+    <div class="discord-info">
+      <div><span class="discord-name">xt9</span><span class="discord-tag">@xt9w</span></div>
+      <div class="discord-status"><span class="status-dot"></span>feel free to DM me</div>
+      <div class="badges" aria-label="Badges Discord">
+        <span class="badge" title="Badge Discord"><img src="https://cdn.discordapp.com/badge-icons/011940fd013da3f7fb926e4a1cd2e618.png" alt="Badge Discord"></span>
+        <span class="badge" title="Badge Discord"><img src="https://cdn.discordapp.com/badge-icons/2ba85e8026a8614b640c2837bcdfe21b.png" alt="Badge Discord"></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="about">
+    <p class="cmd"></p>
+    <h2>About me</h2>
+    <p>
+      Editor and artist from Switerland, currently pursuing a degree in Mathematics and Physics.
+I will soon turn 17 years old.
+My journey in Editing began some years ago around May 2024, experimenting with Vegas Pro 16 and After Effects 2024.
+I also like art, Maths and Philosophy.
+    </p>
+    <p class="edit-note"></p>
+  </section>
+
+
+  <section id="interests">
+    <p class="cmd"></p>
+    <h2>Interests</h2>
+    <ul class="plain">
+      <li>Mathematics</li>
+      <li>Philosophy</li>
+      <li>Editing</li>
+      <li>Arts</li>
+    </ul>
+  </section>
+
+
+  <section id="languages">
+    <p class="cmd"></p>
+    <h2>Languages</h2>
+    <div class="lang-row">
+      <span class="lang-name">French</span>
+      <div class="bar"><div class="bar-fill" style="width:100%"></div></div>
+    </div>
+    <div class="lang-row">
+      <span class="lang-name">English</span>
+      <div class="bar"><div class="bar-fill" style="width:90%"></div></div>
+    </div>
+    <div class="lang-row">
+      <span class="lang-name">German</span>
+      <div class="bar"><div class="bar-fill" style="width:40%"></div></div>
+    </div>
+  </section>
+
+
+  <section id="projects">
+    <p class="cmd"></p>
+    <h2>Projects</h2>
+    <div class="projects">
+      <div class="project">
+        <h3>Portfolio</h3>
+        <p>I will soon update my portfolio.</p>
+        <div class="stack"></div>
+        <br>
+      </div>
+    </div>
+    <p class="edit-note"></p>
+  </section>
+
+  <section id="contact">
+    <p class="cmd">contact - send</p>
+    <h2>Contact me</h2>
+    <div class="contact-list">
+      <a href="xt9mail@gmail.com"><span>Email:</span> xt9mail@gmail.com</a>
+      <a href="https://github.com/xt9w" target="_blank"><span>GitHub:</span> github.com/xt9w</a>
+      <a href="https://instagram.com/2808nolhan" target="_blank"><span>Instagram:</span> instagram.com/2808nolhan</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>© 2026 xt9 — Built with HTML/CSS</footer>
+
+<script>
+  const text = "xt9";
+  const el = document.getElementById('typed');
+  let i = 0;
+  function type(){
+    if(i <= text.length){
+      el.innerHTML = text.slice(0, i) + '<span class="cursor"></span>';
+      i++;
+      setTimeout(type, 90);
+    } else {
+      el.innerHTML = text + '<span class="cursor"></span>';
+    }
+  }
+  type();
+
+  const profileCards = document.querySelectorAll('.profile-card, .discord-card');
+
+  if (profileCards.length && window.matchMedia('(hover: hover)').matches) {
+    profileCards.forEach((card) => {
+      card.addEventListener('mousemove', (event) => {
+        const bounds = card.getBoundingClientRect();
+
+        const horizontal =
+          (event.clientX - (bounds.left + bounds.width / 2)) / (bounds.width / 2);
+
+        const vertical =
+          (event.clientY - (bounds.top + bounds.height / 2)) / (bounds.height / 2);
+
+        card.style.transform =
+          `perspective(900px) rotateX(${-vertical * 4}deg) rotateY(${-horizontal * 4}deg)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform =
+          'perspective(900px) rotateX(0deg) rotateY(0deg)';
+      });
+    });
+  }
+</script>
+
+</body>
+</html>
